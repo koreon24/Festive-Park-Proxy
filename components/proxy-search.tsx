@@ -23,6 +23,8 @@ export default function ProxySearch({ user }: ProxySearchProps) {
   const [userName, setUserName] = useState("")
   const [theme, setTheme] = useState("liquid-glass")
   const [backgroundUrl, setBackgroundUrl] = useState("")
+  const [proxyUrl, setProxyUrl] = useState("")
+  const [showProxy, setShowProxy] = useState(false)
 
   useEffect(() => {
     const getGreeting = () => {
@@ -57,10 +59,14 @@ export default function ProxySearch({ user }: ProxySearchProps) {
 
       if (isUrl) {
         const url = trimmedQuery.startsWith("http") ? trimmedQuery : `https://${trimmedQuery}`
-        window.open(url, "_blank", "noopener,noreferrer")
+        const proxyPath = `/api/proxy?url=${encodeURIComponent(url)}`
+        setProxyUrl(proxyPath)
+        setShowProxy(true)
       } else {
         const searchUrl = `https://duckduckgo.com/?q=${encodeURIComponent(trimmedQuery)}`
-        window.open(searchUrl, "_blank", "noopener,noreferrer")
+        const proxyPath = `/api/proxy?url=${encodeURIComponent(searchUrl)}`
+        setProxyUrl(proxyPath)
+        setShowProxy(true)
       }
 
       const supabase = createClient()
@@ -88,6 +94,24 @@ export default function ProxySearch({ user }: ProxySearchProps) {
     const supabase = createClient()
     await supabase.auth.signOut()
     router.push("/")
+  }
+
+  if (showProxy) {
+    return (
+      <div className="min-h-screen flex flex-col">
+        <div className="bg-card border-b p-2 flex items-center gap-2">
+          <Button variant="outline" size="sm" onClick={() => setShowProxy(false)}>
+            ← Back to Search
+          </Button>
+          <div className="flex-1 text-sm text-muted-foreground truncate">{proxyUrl}</div>
+        </div>
+        <iframe
+          src={proxyUrl}
+          className="flex-1 w-full border-0"
+          sandbox="allow-same-origin allow-scripts allow-forms allow-popups"
+        />
+      </div>
+    )
   }
 
   return (
