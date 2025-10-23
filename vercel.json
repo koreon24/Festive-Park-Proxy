@@ -1,0 +1,8 @@
+{
+  "crons": [
+    {
+      "path": "/api/cleanup-old-verifications",
+      "schedule": "0 2 * * *"
+    }
+  ]
+}
