@@ -185,6 +185,11 @@
     animation: float 3s ease-in-out infinite;
   }
 
+  /* Added animation delay utility */
+  .animation-delay-150 {
+    animation-delay: 150ms;
+  }
+
   /* Theme-specific styles */
   [data-theme="light"] {
     --background: oklch(0.98 0.01 240);

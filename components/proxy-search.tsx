@@ -96,6 +96,19 @@ export default function ProxySearch({ user }: ProxySearchProps) {
     router.push("/")
   }
 
+  const getBackgroundClass = () => {
+    if (backgroundUrl) return ""
+
+    switch (theme) {
+      case "dark":
+        return "bg-gradient-to-br from-gray-900 to-gray-800"
+      case "light":
+        return "bg-gradient-to-br from-gray-50 to-white"
+      default: // liquid-glass
+        return "bg-gradient-to-br from-primary/20 via-secondary/20 to-accent/20 animate-gradient-shift"
+    }
+  }
+
   if (showProxy) {
     return (
       <div className="min-h-screen flex flex-col">
@@ -115,11 +128,9 @@ export default function ProxySearch({ user }: ProxySearchProps) {
   }
 
   return (
-    <div className="min-h-screen relative overflow-hidden" data-theme={theme}>
-      {backgroundUrl ? (
+    <div className={`min-h-screen relative overflow-hidden ${getBackgroundClass()}`} data-theme={theme}>
+      {backgroundUrl && (
         <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(${backgroundUrl})` }} />
-      ) : (
-        <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-secondary/20 to-accent/20 animate-gradient-shift" />
       )}
 
       <div className="relative z-10 min-h-screen p-4">

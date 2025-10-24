@@ -3,14 +3,17 @@
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import { createClient } from "@/lib/supabase/client"
-import { Loader2 } from "lucide-react"
 import ProxySearch from "@/components/proxy-search"
+import OnboardingFlow from "@/components/onboarding-flow"
+import LoadingScreen from "@/components/loading-screen"
 import { isAdminEmail, getAdminName } from "@/lib/admin"
 
 export default function ProxyPage() {
   const router = useRouter()
   const [loading, setLoading] = useState(true)
   const [user, setUser] = useState<any>(null)
+  const [showOnboarding, setShowOnboarding] = useState(false)
+  const [showWelcomeBack, setShowWelcomeBack] = useState(false)
 
   useEffect(() => {
     checkAuth()
@@ -33,8 +36,14 @@ export default function ProxyPage() {
           email: authUser.email,
           full_name: getAdminName(authUser.email),
           is_admin: true,
+          has_completed_onboarding: true,
+          theme: "liquid-glass",
         })
-        setLoading(false)
+        setShowWelcomeBack(true)
+        setTimeout(() => {
+          setShowWelcomeBack(false)
+          setLoading(false)
+        }, 2000)
         return
       }
 
@@ -54,22 +63,39 @@ export default function ProxyPage() {
       await supabase.from("users").update({ last_login: new Date().toISOString() }).eq("id", userData.id)
 
       setUser(userData)
-      setLoading(false)
+
+      if (!userData.has_completed_onboarding) {
+        setShowOnboarding(true)
+        setLoading(false)
+      } else {
+        setShowWelcomeBack(true)
+        setTimeout(() => {
+          setShowWelcomeBack(false)
+          setLoading(false)
+        }, 2000)
+      }
     } catch (err) {
       console.error("[v0] Auth check error:", err)
       router.push("/auth/login")
     }
   }
 
+  const handleOnboardingComplete = () => {
+    setShowOnboarding(false)
+    checkAuth()
+  }
+
   if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="relative">
-          <div className="absolute inset-0 bg-gradient-to-r from-primary via-secondary to-accent rounded-full blur-xl opacity-50 animate-pulse" />
-          <Loader2 className="relative w-12 h-12 animate-spin text-primary" />
-        </div>
-      </div>
-    )
+    return <LoadingScreen />
+  }
+
+  if (showWelcomeBack && user) {
+    const firstName = user.full_name?.split(" ")[0] || user.email?.split("@")[0] || "User"
+    return <LoadingScreen message={`Welcome back, ${firstName}`} />
+  }
+
+  if (showOnboarding && user) {
+    return <OnboardingFlow user={user} onComplete={handleOnboardingComplete} />
   }
 
   return <ProxySearch user={user} />
