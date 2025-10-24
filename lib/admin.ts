@@ -1,5 +1,5 @@
 // Shared admin configuration
-export const ADMIN_EMAILS = ["carsonzhorse@gmail.com", "ChenEmperor1020@gmail.com"]
+export const ADMIN_EMAILS = ["carsonzhorse@gmail.com", "chenemperor1020@gmail.com"]
 
 export const ADMIN_NAMES: Record<string, string> = {
   "carsonzhorse@gmail.com": "Carson",
