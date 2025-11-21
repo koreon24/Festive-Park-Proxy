@@ -31,6 +31,8 @@ export async function POST(req: NextRequest) {
       prompt = `[Student uploaded an image of their homework: ${imageUrl}]\n\n${prompt || "Can you help me understand this problem?"}`
     }
 
+    console.log("[v0] Generating homework help response for:", prompt.substring(0, 100))
+
     const { text } = await generateText({
       model: "openai/gpt-4o-mini",
       system: SYSTEM_PROMPT,
@@ -39,11 +41,20 @@ export async function POST(req: NextRequest) {
       maxTokens: 1000,
     })
 
+    console.log("[v0] Generated response:", text.substring(0, 100))
+
     const filteredText = text.replace(/\b(fuck|shit|damn|hell|ass|bitch)\b/gi, "***")
 
     return NextResponse.json({ response: filteredText })
-  } catch (error) {
+  } catch (error: any) {
     console.error("[v0] Homework help API error:", error)
-    return NextResponse.json({ error: "Failed to generate response" }, { status: 500 })
+    console.error("[v0] Error details:", error.message, error.stack)
+    return NextResponse.json(
+      {
+        error: "Failed to generate response",
+        details: error.message,
+      },
+      { status: 500 },
+    )
   }
 }

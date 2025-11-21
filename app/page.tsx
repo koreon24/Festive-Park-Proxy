@@ -49,7 +49,7 @@ export default function Home() {
             </Link>
 
             {/* Homework Card */}
-            <Link href="/auth/homework-login" className="group">
+            <Link href="/auth/login" className="group">
               <Card className="glass-strong p-8 h-full hover:scale-105 transition-all duration-300 cursor-pointer border-2 border-transparent hover:border-accent/50 shadow-xl hover:shadow-2xl animate-liquid-glass">
                 <div className="space-y-6">
                   <div className="relative">

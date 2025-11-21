@@ -23,22 +23,17 @@ export default function HomeworkPage() {
       } = await supabase.auth.getUser()
 
       if (!authUser) {
-        router.push("/auth/homework-login")
+        router.push("/auth/login")
         return
       }
 
-      // Try to get homework user data
-      const { data: homeworkUser } = await supabase
-        .from("homework_users")
-        .select("*")
-        .eq("email", authUser.email?.toLowerCase())
-        .single()
+      const { data: userData } = await supabase.from("users").select("*").eq("id", authUser.id).single()
 
-      setUser(homeworkUser || { email: authUser.email, full_name: authUser.email?.split("@")[0] })
+      setUser(userData || { email: authUser.email, full_name: authUser.email?.split("@")[0] })
       setLoading(false)
     } catch (err) {
       console.error("[v0] Auth check error:", err)
-      router.push("/auth/homework-login")
+      router.push("/auth/login")
     }
   }
 
