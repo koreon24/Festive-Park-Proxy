@@ -23,7 +23,7 @@ export default function HomeworkPage() {
       } = await supabase.auth.getUser()
 
       if (!authUser) {
-        router.push("/auth/login")
+        router.push("/auth/login?redirect=/homework")
         return
       }
 
@@ -33,7 +33,7 @@ export default function HomeworkPage() {
       setLoading(false)
     } catch (err) {
       console.error("[v0] Auth check error:", err)
-      router.push("/auth/login")
+      router.push("/auth/login?redirect=/homework")
     }
   }
 

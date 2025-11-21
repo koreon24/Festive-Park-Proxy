@@ -60,7 +60,12 @@ function LoginForm() {
 
       console.log("[v0] Login successful, checking user status...")
 
-      router.push("/proxy")
+      const redirect = searchParams.get("redirect")
+      if (redirect) {
+        router.push(redirect)
+      } else {
+        router.push("/proxy")
+      }
     } catch (error: unknown) {
       console.error("[v0] Unexpected error:", error)
       setError(error instanceof Error ? error.message : "An error occurred")
@@ -80,7 +85,7 @@ function LoginForm() {
             <CardTitle className="text-3xl bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent">
               Welcome Back
             </CardTitle>
-            <CardDescription>Sign in to access Festive Park Proxy or AI  </CardDescription>
+            <CardDescription>Sign in to access Festive Park Proxy or AI</CardDescription>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleLogin}>
