@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation"
 import { createClient } from "@/lib/supabase/client"
 import HomeworkHelper from "@/components/homework-helper"
 import LoadingScreen from "@/components/loading-screen"
-import { isAdminEmail, getAdminName } from "@/lib/admin"
 
 export default function HomeworkPage() {
   const router = useRouter()
@@ -24,38 +23,22 @@ export default function HomeworkPage() {
       } = await supabase.auth.getUser()
 
       if (!authUser) {
-        router.push("/auth/login")
+        router.push("/auth/homework-login")
         return
       }
 
-      if (isAdminEmail(authUser.email)) {
-        setUser({
-          email: authUser.email,
-          full_name: getAdminName(authUser.email),
-          is_admin: true,
-        })
-        setLoading(false)
-        return
-      }
-
-      const { data: userData, error } = await supabase
-        .from("users")
+      // Try to get homework user data
+      const { data: homeworkUser } = await supabase
+        .from("homework_users")
         .select("*")
-        .eq("email", authUser.email.toLowerCase())
+        .eq("email", authUser.email?.toLowerCase())
         .single()
 
-      if (error || !userData) {
-        console.error("[v0] User not found in database:", error)
-        alert("Your account is not approved yet. Please wait for admin approval.")
-        router.push("/auth/login")
-        return
-      }
-
-      setUser(userData)
+      setUser(homeworkUser || { email: authUser.email, full_name: authUser.email?.split("@")[0] })
       setLoading(false)
     } catch (err) {
       console.error("[v0] Auth check error:", err)
-      router.push("/auth/login")
+      router.push("/auth/homework-login")
     }
   }
 

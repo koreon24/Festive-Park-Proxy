@@ -114,9 +114,9 @@ export default function HomeworkHelper({ user }: { user: any }) {
                 </div>
               </div>
             </div>
-            <Link href="/proxy">
+            <Link href="/">
               <Button variant="outline" size="sm">
-                Back to Proxy
+                Back to Home
               </Button>
             </Link>
           </div>
