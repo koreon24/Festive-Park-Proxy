@@ -51,7 +51,7 @@ export async function POST(req: NextRequest) {
     console.error("[v0] Error details:", error.message, error.stack)
     return NextResponse.json(
       {
-        error: "Failed to generate response",
+        error: "I'm having trouble connecting right now. Please try again in a moment!",
         details: error.message,
       },
       { status: 500 },
