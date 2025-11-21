@@ -1,5 +1,6 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { generateText } from "ai"
+import { createOpenAI } from "@ai-sdk/openai"
 
 const SYSTEM_PROMPT = `You are an educational AI tutor for homework help. Your role is to help students LEARN, not to give them answers.
 
@@ -22,7 +23,22 @@ Be encouraging, patient, and educational. Your goal is understanding, not comple
 
 export async function POST(req: NextRequest) {
   try {
-    const { messages, imageUrl } = await req.json()
+    console.log("[v0] Homework help API called")
+
+    if (!process.env.OPENAI_API_KEY) {
+      console.error("[v0] Missing OPENAI_API_KEY environment variable")
+      return NextResponse.json(
+        {
+          error: "AI service not configured. Please add your OPENAI_API_KEY to environment variables.",
+        },
+        { status: 500 },
+      )
+    }
+
+    const body = await req.json()
+    console.log("[v0] Request body:", JSON.stringify(body).substring(0, 200))
+
+    const { messages, imageUrl } = body
 
     const lastMessage = messages[messages.length - 1]
     let prompt = lastMessage.content
@@ -33,25 +49,31 @@ export async function POST(req: NextRequest) {
 
     console.log("[v0] Generating homework help response for:", prompt.substring(0, 100))
 
-    const { text } = await generateText({
-      model: "openai/gpt-4o-mini",
+    const openai = createOpenAI({
+      apiKey: process.env.OPENAI_API_KEY,
+    })
+
+    const result = await generateText({
+      model: openai("gpt-4o-mini"),
       system: SYSTEM_PROMPT,
       prompt: prompt,
       temperature: 0.7,
       maxTokens: 1000,
     })
 
-    console.log("[v0] Generated response:", text.substring(0, 100))
+    console.log("[v0] AI response received:", result.text.substring(0, 100))
 
-    const filteredText = text.replace(/\b(fuck|shit|damn|hell|ass|bitch)\b/gi, "***")
+    const filteredText = result.text.replace(/\b(fuck|shit|damn|hell|ass|bitch)\b/gi, "***")
 
     return NextResponse.json({ response: filteredText })
   } catch (error: any) {
     console.error("[v0] Homework help API error:", error)
-    console.error("[v0] Error details:", error.message, error.stack)
+    console.error("[v0] Error message:", error.message)
+
     return NextResponse.json(
       {
-        error: "I'm having trouble connecting right now. Please try again in a moment!",
+        error:
+          "I'm having trouble connecting right now. Please add your OPENAI_API_KEY to environment variables in the Vars section.",
         details: error.message,
       },
       { status: 500 },

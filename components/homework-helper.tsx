@@ -54,6 +54,7 @@ export default function HomeworkHelper({ user }: { user: any }) {
     setLoading(true)
 
     try {
+      console.log("[v0] Sending homework help request")
       const response = await fetch("/api/homework-help", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -63,9 +64,12 @@ export default function HomeworkHelper({ user }: { user: any }) {
         }),
       })
 
+      console.log("[v0] Response status:", response.status)
       const data = await response.json()
+      console.log("[v0] Response data:", data)
 
       if (data.error) {
+        console.error("[v0] API returned error:", data.error, data.details, data.type)
         throw new Error(data.error)
       }
 
