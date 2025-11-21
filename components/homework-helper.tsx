@@ -1,6 +1,7 @@
 "use client"
 
 import type React from "react"
+import { getAdminName } from "@/lib/admin"
 
 import { useState, useRef } from "react"
 import { Card } from "@/components/ui/card"
@@ -90,9 +91,11 @@ export default function HomeworkHelper({ user }: { user: any }) {
     }
   }
 
-  const firstName =
-    user?.full_name?.split(" ")[0] ||
-    (user?.email ? user.email.split("@")[0].charAt(0).toUpperCase() + user.email.split("@")[0].slice(1) : "Student")
+  const firstName = user?.email
+    ? getAdminName(user.email) !== "Admin"
+      ? getAdminName(user.email)
+      : user.email.split("@")[0].charAt(0).toUpperCase() + user.email.split("@")[0].slice(1)
+    : "Student"
 
   return (
     <div className="min-h-screen relative overflow-hidden">
