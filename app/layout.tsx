@@ -12,7 +12,8 @@ export const metadata: Metadata = {
   description: "Festive Park - Proxy and Homework Helper",
   generator: "v0.app",
   icons: {
-    icon: "/favicon.ico",
+    icon: [{ url: "/favicon.ico" }, { url: "/icon.png", type: "image/png" }],
+    apple: "/apple-icon.png",
   },
 }
 
