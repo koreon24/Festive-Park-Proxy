@@ -10,7 +10,7 @@ import { Label } from "@/components/ui/label"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
 
-const ADMIN_EMAILS = ["carsonzhorse@gmail.com", "ChenEmperor1020@gmail.com"]
+const ADMIN_EMAILS = ["carsonzhorse@gmail.com", "chenemperor1020@gmail.com"]
 
 export default function Page() {
   const [email, setEmail] = useState("")
@@ -24,7 +24,7 @@ export default function Page() {
     setIsLoading(true)
     setError(null)
 
-    if (!ADMIN_EMAILS.includes(email)) {
+    if (!ADMIN_EMAILS.includes(email.toLowerCase())) {
       setError("Unauthorized: You are not an admin")
       setIsLoading(false)
       return

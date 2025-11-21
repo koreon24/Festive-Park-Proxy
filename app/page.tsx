@@ -1,6 +1,6 @@
 "use client"
 import { Card } from "@/components/ui/card"
-import { Shield, Search, Sparkles, ArrowRight } from "lucide-react"
+import { Shield, Search, Sparkles, ArrowRight, BookOpen } from "lucide-react"
 import Link from "next/link"
 
 export default function Home() {
@@ -26,7 +26,7 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-6">
+          <div className="grid md:grid-cols-3 gap-6">
             {/* Verification Card */}
             <Link href="/verify" className="group">
               <Card className="glass-strong p-8 h-full hover:scale-105 transition-all duration-300 cursor-pointer border-2 border-transparent hover:border-primary/50 shadow-xl hover:shadow-2xl animate-liquid-glass">
@@ -42,6 +42,31 @@ export default function Home() {
                   </div>
                   <div className="flex items-center gap-2 text-primary font-medium group-hover:gap-4 transition-all">
                     Start Verification
+                    <ArrowRight className="w-5 h-5" />
+                  </div>
+                </div>
+              </Card>
+            </Link>
+
+            <Link href="/homework" className="group">
+              <Card className="glass-strong p-8 h-full hover:scale-105 transition-all duration-300 cursor-pointer border-2 border-transparent hover:border-accent/50 shadow-xl hover:shadow-2xl animate-liquid-glass">
+                <div className="space-y-6">
+                  <div className="relative">
+                    <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-accent to-primary flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                      <BookOpen className="w-8 h-8 text-white" />
+                    </div>
+                    <span className="absolute -top-2 -right-2 px-2 py-1 text-xs font-bold bg-primary text-primary-foreground rounded-full">
+                      BETA
+                    </span>
+                  </div>
+                  <div className="space-y-3">
+                    <h2 className="text-2xl font-bold">AI Homework Help</h2>
+                    <p className="text-muted-foreground leading-relaxed">
+                      Get help understanding your homework. AI explains concepts without giving answers.
+                    </p>
+                  </div>
+                  <div className="flex items-center gap-2 text-accent font-medium group-hover:gap-4 transition-all">
+                    Get Help
                     <ArrowRight className="w-5 h-5" />
                   </div>
                 </div>

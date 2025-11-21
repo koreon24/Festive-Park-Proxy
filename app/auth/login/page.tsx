@@ -80,7 +80,7 @@ function LoginForm() {
             <CardTitle className="text-3xl bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent">
               Welcome Back
             </CardTitle>
-            <CardDescription>Sign in to access Festive Park proxy</CardDescription>
+            <CardDescription>Sign in to access Festive Park Proxy or AI  </CardDescription>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleLogin}>
